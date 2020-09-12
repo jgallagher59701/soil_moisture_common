@@ -24,8 +24,6 @@ void build_data_packet(packet_t *data, const uint8_t node, const uint32_t messag
                        const uint32_t time, const uint16_t battery, const uint16_t last_tx_duration,
                        const int16_t temp, const uint16_t humidity, const uint8_t status) {
 
-    SerialUSB.println("Start of build data packet");
-
     data->node = node;
     data->message = message;
     data->time = time;
@@ -50,7 +48,7 @@ void build_data_packet(packet_t *data, const uint8_t node, const uint32_t messag
  */
 void parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, uint32_t *time,
                        uint16_t *battery, uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status) {
-   if (node)
+    if (node)
         *node = data->node;
 
     if (message)
@@ -98,7 +96,7 @@ char *data_packet_to_string(const packet_t *data, bool pretty /* false */) {
 
     parse_data_packet(data, &node, &message, &time, &battery, &last_tx_duration, &temp, &humidity, &status);
 
-    static char decoded_string[128];
+    static char decoded_string[256];
     if (pretty) {
         // string length 62 characters + 2 bytes (6 chars) + 2 Longs (20) + 3 Shorts (15)
         // = 62 + 41 = 103
