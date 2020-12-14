@@ -82,7 +82,7 @@ void parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, u
  * 
  * @param data The data packet
  * @param pretty Optional, if true, print names, units, etc. Default: false
- * @return Pointer to the string in static storage.
+ * @return Pointer to the string in static storage. Always null terminated.
  */
 char *data_packet_to_string(const packet_t *data, bool pretty /* false */) {
     uint8_t node;
