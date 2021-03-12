@@ -7,6 +7,8 @@
 #ifndef h_message_type_h
 #define h_message_type_h
 
+#include <Arduino.h>
+
 /** 
  * Message types the leaf node may send to the main node.
  */
@@ -68,7 +70,7 @@ struct time_request_t {
  */
 struct time_response_t {
     uint32_t time;
-}
+};
 
 // TODO add text message
 
