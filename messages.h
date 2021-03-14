@@ -48,6 +48,7 @@ struct join_request_t {
  * with the main node).
  */
 struct join_response_t {
+    MessageType type;
     uint8_t node;
     uint32_t time;
 };
@@ -69,6 +70,7 @@ struct time_request_t {
  * The time from the main node.
  */
 struct time_response_t {
+    MessageType type;
     uint32_t time;
 };
 

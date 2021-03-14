@@ -5,7 +5,7 @@
 // and _to_string function.
 
 #include <Arduino.h>
-#include <message_type.h>
+#include <messages.h>
 
 /**
  * @brief Get MessageType field of any of the messages
@@ -88,8 +88,6 @@ char *join_request_to_string(const join_request_t *jr, bool pretty /*false*/) {
 
     static char decoded_string[64];
     if (pretty) {
-        // string length 62 characters + 2 bytes (6 chars) + 2 Longs (20) + 3 Shorts (15)
-        // = 62 + 41 = 103
         snprintf((char *)decoded_string, sizeof(decoded_string), "type: %s, device EUI: 0x%16x",
                  get_message_type_string(get_message_type((void*)jr)), dev_eui);
     } else {
