@@ -29,25 +29,27 @@ MessageType get_message_type(void *message) {
 char *get_message_type_string(MessageType type) {
     switch (type) {
         case join_request:
-            return "join request";
+            return (char*)"join request";
         case join_response:
-            return "join response";
+            return (char*)"join response";
         case time_request:
-            return "time request";
+            return (char*)"time request";
         case time_response:
-            return "time response";
+            return (char*)"time response";
         case error:
-            return "error";
+            return (char*)"error";
         case data_packet:
-            return "data packet";
+            return (char*)"data packet";
         case text:
-            return "text";
+            return (char*)"text";
 
         default:
-            return "unknown";
+            return (char*)"unknown";
     }
 }
 
+/** @name Join Request */
+///@{
 /**
  * @brief Build a join_request message
  * @param jr Pointer to join_request_t structure
@@ -88,12 +90,63 @@ char *join_request_to_string(const join_request_t *jr, bool pretty /*false*/) {
 
     static char decoded_string[64];
     if (pretty) {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "type: %s, device EUI: 0x%16x",
+        snprintf((char *)decoded_string, sizeof(decoded_string), "type: %s, device EUI: 0x%16llx",
                  get_message_type_string(get_message_type((void*)jr)), dev_eui);
     } else {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "%s, 0x%16x",
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%s, 0x%16llx",
                  get_message_type_string(get_message_type((void*)jr)), dev_eui);
     }
 
     return decoded_string;
 }
+///@}
+
+/** @name Join response */
+///@{
+
+/**
+ * @brief Build a Join Response message
+ *
+ * The main node responds to a Join Request by assigning a node number (1-254)
+ * to the requesting node and returning that node number and the current time.
+ * The requester updates its node number and time.
+ *
+ * @param jr The join Response message
+ * @param node The node number
+ * @param time The time
+ */
+void build_join_response(join_response_t *jr, uint8_t node, uint32_t time) {
+    jr->type = join_response;
+    jr->node = node;
+    jr->time = time;
+}
+
+
+bool parse_join_response(const join_response_t *data, uint8_t *node, uint32_t *time) {
+    if (data->type != join_request)
+        return false;
+
+    if (node)
+        *node = data->node;
+    if (time)
+        *time = data->time;
+
+    return true;
+}
+
+char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/) {
+    uint8_t node;
+    uint32_t time;
+
+    parse_join_response(jr, &node, &time);
+
+    static char decoded_string[64];
+    if (pretty) {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %ul", node, time);
+    } else {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %ul", node, time);
+    }
+
+    return decoded_string;
+}
+///@}
