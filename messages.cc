@@ -36,8 +36,10 @@ char *get_message_type_string(MessageType type) {
             return (char*)"time request";
         case time_response:
             return (char*)"time response";
+#if 0
         case error:
             return (char*)"error";
+#endif
         case data_packet:
             return (char*)"data packet";
         case text:
@@ -139,6 +141,127 @@ char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/) 
     uint32_t time;
 
     parse_join_response(jr, &node, &time);
+
+    static char decoded_string[64];
+    if (pretty) {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %ul", node, time);
+    } else {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %ul", node, time);
+    }
+
+    return decoded_string;
+}
+///@}
+
+/////////////////
+/**
+ * The leaf node asks the main node for the time.
+ */
+struct time_request_t {
+    MessageType type;
+    uint8_t node; // node making the request
+};
+
+/// Size of the time request in bytes
+#define TIME_RESPONSE_SIZE sizeof(time_response_t)
+
+/**
+ * The time from the main node.
+ */
+struct time_response_t {
+    MessageType type;
+    uint32_t time;
+};
+
+/** @name Time Request */
+///@{
+/**
+ * @brief Build a time_request message
+ * @param tr Pointer to time_request_t structure
+ * @param node The node making the request
+ */
+void build_time_request(time_request_t *tr, uint8_t node) {
+    tr->type = time_request;
+    tr->node = node;
+}
+
+/**
+ * @brief extract information from a time_request message
+ * @param node If not null, returns the node number of the requesting leaf node
+ * @return true is this is a time_request message, false otherwise.
+ */
+bool parse_time_request(const time_request_t *data, uint8_t *node) {
+    if (data->type != time_request)
+        return false;
+
+    if (node)
+        *node = data->node;
+
+    return true;
+}
+
+/**
+ * @brief Get a string representation for a time request message
+
+ * @param tr A pointer to the time request message
+ * @param pretty True == print a verbose version, false == just the field values
+ * @return The string representation, a pointer to static memory. Overwritten
+ * on subsequent calls.
+ */
+char *time_request_to_string(const time_request_t *tr, bool pretty /*false*/) {
+    uint8_t node;
+
+    parse_time_request(tr, &node);
+
+    static char decoded_string[64];
+    if (pretty) {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "type: %s, Node: %d",
+                 get_message_type_string(get_message_type((void*)tr)), node);
+    } else {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%s, %d",
+                 get_message_type_string(get_message_type((void*)tr)), node);
+    }
+
+    return decoded_string;
+}
+///@}
+
+/** @name Time response */
+///@{
+
+/**
+ * @brief Build a Time Response message
+ *
+ * The main node responds to a Time Request by the time from its RTC.
+ *
+ * @param tr The Time Response message
+ * @param node The node number
+ * @param time The time
+ */
+void build_time_response(time_response_t *jr, uint8_t node, uint32_t time) {
+    jr->type = time_response;
+    jr->node = node;
+    jr->time = time;
+}
+
+
+bool parse_time_response(const time_response_t *data, uint8_t *node, uint32_t *time) {
+    if (data->type != time_response)
+        return false;
+
+    if (node)
+        *node = data->node;
+    if (time)
+        *time = data->time;
+
+    return true;
+}
+
+char *time_response_to_string(const time_response_t *tr, bool pretty /*false*/) {
+    uint8_t node;
+    uint32_t time;
+
+    parse_time_response(tr, &node, &time);
 
     static char decoded_string[64];
     if (pretty) {

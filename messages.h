@@ -8,6 +8,7 @@
 #define h_message_type_h
 
 #include <Arduino.h>
+#include <RH_RF95.h>
 
 /** 
  * Message types the leaf node may send to the main node.
@@ -17,7 +18,7 @@ enum MessageType {
     join_response = 2,
     time_request = 3,
     time_response = 4,
-    error = 5,
+    // error = 5,
 
     // the main node only provides the ACK for these messages
     data_packet = 10,
@@ -31,6 +32,10 @@ enum MessageType {
  * A leaf node send a request to join the main node. It includes
  * its EUI - a kind of UUID. The response from the main nide is a
  * join_response_t.
+ *
+ * @note there is no node number in this request because this is
+ * the request a new node makes to get that 8-bit number bound to
+ * its 64-bit EUI.
  */
 struct join_request_t {
     MessageType type; // join_request
@@ -50,6 +55,7 @@ struct join_request_t {
 struct join_response_t {
     MessageType type;
     uint8_t node;
+    uint8_t main_node;
     uint32_t time;
 };
 
@@ -61,6 +67,7 @@ struct join_response_t {
  */
 struct time_request_t {
     MessageType type;
+    uint8_t node; // node making the request
 };
 
 /// Size of the time request in bytes
@@ -71,9 +78,14 @@ struct time_request_t {
  */
 struct time_response_t {
     MessageType type;
+    uint8_t node;
     uint32_t time;
 };
 
-// TODO add text message
+struct text_t {
+    MessageType type;
+    uint32_t node;
+    uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
+};
 
 #endif
