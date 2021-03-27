@@ -47,15 +47,17 @@ struct join_request_t {
 
 /**
  * The main node responds with the byte node number this leaf node
- * should use in all subsequent messages (it maintains a table of 
- * EUIs to byte node numbers) and the time. The leaf node records the
- * byte node number and sets its time (so it will be synchronized
- * with the main node).
+ * should use in all subsequent messages and the time. The main node
+ * maintains a table mapping EUIs to leaf_ node numbers.  The leaf
+ * node records the node number and sets its time (so it will be
+ * synchronized with the main node).
+ *
+ * @todo Add EUI to the response
  */
 struct join_response_t {
     MessageType type;
-    uint8_t node;
-    uint8_t main_node;
+    uint8_t node;       // From
+    uint8_t leaf_node;  // TO
     uint32_t time;
 };
 
@@ -67,7 +69,7 @@ struct join_response_t {
  */
 struct time_request_t {
     MessageType type;
-    uint8_t node; // node making the request
+    uint8_t node; // From
 };
 
 /// Size of the time request in bytes
@@ -78,14 +80,38 @@ struct time_request_t {
  */
 struct time_response_t {
     MessageType type;
-    uint8_t node;
-    uint32_t time;
+    uint8_t node;       // From
+    uint32_t time;      // Unix time
 };
 
 struct text_t {
     MessageType type;
-    uint32_t node;
-    uint8_t rf95_buf[RH_RF95_MAX_MESSAGE_LEN];
+    uint32_t node;      // From
+    uint8_t length;     // Number of chars in buf
+    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
 };
 
+
+MessageType get_message_type(void *message);
+char *get_message_type_string(MessageType type);
+
+void build_join_request(join_request_t *jr, uint64_t dev_eui);
+bool parse_join_request(const join_request_t *data, uint64_t *dev_eui);
+char *join_request_to_string(const join_request_t *jr, bool pretty /*false*/);
+
+char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/);
+bool parse_join_response(const join_response_t *data, uint8_t *node, uint32_t *time);
+void build_join_response(join_response_t *jr, uint8_t node, uint32_t time);
+
+char *time_request_to_string(const time_request_t *tr, bool pretty /*false*/);
+bool parse_time_request(const time_request_t *data, uint8_t *node);
+void build_time_request(time_request_t *tr, uint8_t node);
+
+char *time_response_to_string(const time_response_t *tr, bool pretty /*false*/);
+bool parse_time_response(const time_response_t *data, uint8_t *node, uint32_t *time);
+void build_time_response(time_response_t *jr, uint8_t node, uint32_t time);
+
+char *text_message_to_string(const text_t *t, bool pretty /*false*/);
+bool parse_text_message(const text_t *data, uint8_t *node, uint8_t *length, uint8_t *buf);
+void build_text_message(text_t *t, uint8_t node, uint8_t length, uint8_t *buf /*RH_RF95_MAX_MESSAGE_LEN chars*/);
 #endif

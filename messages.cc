@@ -153,26 +153,6 @@ char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/) 
 }
 ///@}
 
-/////////////////
-/**
- * The leaf node asks the main node for the time.
- */
-struct time_request_t {
-    MessageType type;
-    uint8_t node; // node making the request
-};
-
-/// Size of the time request in bytes
-#define TIME_RESPONSE_SIZE sizeof(time_response_t)
-
-/**
- * The time from the main node.
- */
-struct time_response_t {
-    MessageType type;
-    uint32_t time;
-};
-
 /** @name Time Request */
 ///@{
 /**
@@ -243,7 +223,6 @@ void build_time_response(time_response_t *jr, uint8_t node, uint32_t time) {
     jr->node = node;
     jr->time = time;
 }
-
 
 bool parse_time_response(const time_response_t *data, uint8_t *node, uint32_t *time) {
     if (data->type != time_response)
