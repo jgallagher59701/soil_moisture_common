@@ -144,9 +144,9 @@ char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/) 
 
     static char decoded_string[64];
     if (pretty) {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %ul", node, time);
+        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %lu", node, time);
     } else {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %ul", node, time);
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %lu", node, time);
     }
 
     return decoded_string;
@@ -244,11 +244,63 @@ char *time_response_to_string(const time_response_t *tr, bool pretty /*false*/) 
 
     static char decoded_string[64];
     if (pretty) {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %ul", node, time);
+        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, time: %lu", node, time);
     } else {
-        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %ul", node, time);
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %lu", node, time);
     }
 
     return decoded_string;
 }
 ///@}
+
+/** @name Text message */
+///@{
+
+/**
+ * @brief Build a Text message
+ *
+ * Either the main or leaf node can send a Text message.
+ *
+ * @param t The Text message
+ * @param node The node number
+ * @param length The number of bytes in buf 
+ * @param buf The message characters
+ */
+
+void build_text_message(text_t *t, const uint8_t node, const uint8_t length, const uint8_t *buf /* TEXT_BUF_LEN */) {
+    t->type = text;
+    t->node = node;
+    t->length = length;
+    memcpy(t->buf, buf, (length < TEXT_BUF_LEN) ? length: TEXT_BUF_LEN);
+}
+
+bool parse_text_message(const text_t *data, uint8_t *node, uint8_t *length, uint8_t *buf) {
+    if (data->type != text)
+        return false;
+
+    if (node)
+        *node = data->node;
+    if (length)
+        *length = data->length;
+    if (length && buf)
+        memcpy(buf, data->buf, (*length < TEXT_BUF_LEN) ? *length: TEXT_BUF_LEN);
+
+    return true;
+}
+
+char *text_message_to_string(const text_t *t, bool pretty /*false*/) {
+    uint8_t node;
+    uint8_t length;
+    uint8_t msg[TEXT_BUF_LEN+1];
+
+    parse_text_message(t, &node, &length, msg);
+
+    static char decoded_string[TEXT_BUF_LEN + 20];
+    if (pretty) {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "node: %u, message: %s", node, t->buf);
+    } else {
+        snprintf((char *)decoded_string, sizeof(decoded_string), "%u, %s", node, t->buf);
+    }
+
+    return decoded_string;
+}

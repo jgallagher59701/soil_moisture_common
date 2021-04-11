@@ -84,13 +84,14 @@ struct time_response_t {
     uint32_t time;      // Unix time
 };
 
+#define TEXT_BUF_LEN (RH_RF95_MAX_MESSAGE_LEN - sizeof(MessageType) - sizeof(uint8_t) - sizeof(uint8_t))
+
 struct text_t {
     MessageType type;
     uint32_t node;      // From
     uint8_t length;     // Number of chars in buf
-    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+    uint8_t buf[TEXT_BUF_LEN];
 };
-
 
 MessageType get_message_type(void *message);
 char *get_message_type_string(MessageType type);
@@ -112,6 +113,6 @@ bool parse_time_response(const time_response_t *data, uint8_t *node, uint32_t *t
 void build_time_response(time_response_t *jr, uint8_t node, uint32_t time);
 
 char *text_message_to_string(const text_t *t, bool pretty /*false*/);
-bool parse_text_message(const text_t *data, uint8_t *node, uint8_t *length, uint8_t *buf);
-void build_text_message(text_t *t, uint8_t node, uint8_t length, uint8_t *buf /*RH_RF95_MAX_MESSAGE_LEN chars*/);
+bool parse_text_message(const text_t *data, uint8_t *node, uint8_t *length, uint8_t **buf);
+void build_text_message(text_t *t, const uint8_t node, const uint8_t length, const uint8_t *buf /* TEXT_BUF_LEN */);
 #endif
