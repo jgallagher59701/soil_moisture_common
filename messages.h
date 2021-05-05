@@ -21,8 +21,11 @@ enum MessageType {
     // error = 5,
 
     // the main node only provides the ACK for these messages
-    data_packet = 10,
+    data_message = 10,
     text = 11,
+
+    // The original data packet
+    data_packet = 12
 };
 
 /// Size of the join request in bytes
@@ -115,4 +118,26 @@ void build_time_response(time_response_t *jr, uint8_t node, uint32_t time);
 char *text_message_to_string(const text_t *t, bool pretty /*false*/);
 bool parse_text_message(const text_t *data, uint8_t *node, uint8_t *length, uint8_t **buf);
 void build_text_message(text_t *t, const uint8_t node, const uint8_t length, const uint8_t *buf /* TEXT_BUF_LEN */);
+
+struct data_message_t {
+    MessageType type;
+    uint8_t node;               // Node number
+    uint32_t message;           // message number
+    uint32_t time;              // Unix time
+    uint16_t battery;           // battery voltage * 100
+    uint16_t last_tx_duration;  // duration in ms
+    int16_t temp;               // Temperature in C * 100
+    uint16_t humidity;          // % relative humidity * 100
+    uint8_t status;             // Sensor status code
+};
+
+void build_data_message(data_message_t *data, const uint8_t node, const uint32_t message, const uint32_t time,
+                       const uint16_t battery, const uint16_t last_tx_duration,
+                       const int16_t temp, const uint16_t humidity, const uint8_t status);
+
+bool parse_data_message(const data_message_t *data, uint8_t *node, uint32_t *message, uint32_t *time, uint16_t *battery,
+                       uint16_t *last_tx_duration, int16_t *temp, uint16_t *humidity, uint8_t *status);
+
+char *data_message_to_string(const data_message_t *data, bool pretty = false);
+
 #endif
