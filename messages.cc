@@ -4,7 +4,7 @@
 // For each message type besides 'data_packet' define a build_, parse_
 // and _to_string function.
 
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <messages.h>
 
 /**
@@ -215,7 +215,7 @@ char *time_request_to_string(const time_request_t *tr, bool pretty /*false*/) {
  * The main node responds to a Time Request by the time from its RTC.
  *
  * @param tr The Time Response message
- * @param node The node number
+ * @param node The node number of the responder
  * @param time The time
  */
 void build_time_response(time_response_t *jr, uint8_t node, uint32_t time) {
@@ -373,6 +373,8 @@ bool parse_data_message(const data_message_t *data, uint8_t *node, uint32_t *mes
 
     if (status)
         *status = data->status;
+
+    return true;
 }
 
 /**

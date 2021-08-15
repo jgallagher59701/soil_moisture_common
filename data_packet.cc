@@ -1,8 +1,10 @@
 // functions to build, parse and print data packets for the soil
 // moisture sensor leaf nodes.
 
-#include <Arduino.h>
-#include <assert.h>
+//#include <Arduino.h>
+#include <cassert>
+#include <cstdio>
+#include <cstring>
 
 #include "data_packet.h"
 

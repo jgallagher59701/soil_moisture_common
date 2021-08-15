@@ -7,8 +7,15 @@
 #ifndef h_message_type_h
 #define h_message_type_h
 
-#include <Arduino.h>
-#include <RH_RF95.h>
+// #include <Arduino.h>
+// #include <RH_RF95.h>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+
+#ifndef RH_RF95_MAX_MESSAGE_LEN
+#define RH_RF95_MAX_MESSAGE_LEN 251
+#endif
 
 /** 
  * Message types the leaf node may send to the main node.
@@ -101,9 +108,9 @@ char *get_message_type_string(MessageType type);
 
 void build_join_request(join_request_t *jr, uint64_t dev_eui);
 bool parse_join_request(const join_request_t *data, uint64_t *dev_eui);
-char *join_request_to_string(const join_request_t *jr, bool pretty /*false*/);
+char *join_request_to_string(const join_request_t *jr, bool pretty = false);
 
-char *join_response_to_string(const join_response_t *jr, bool pretty /*false*/);
+char *join_response_to_string(const join_response_t *jr, bool pretty = false);
 bool parse_join_response(const join_response_t *data, uint8_t *node, uint32_t *time);
 void build_join_response(join_response_t *jr, uint8_t node, uint32_t time);
 

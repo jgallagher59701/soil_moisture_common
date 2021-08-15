@@ -3,7 +3,8 @@
 #ifndef h_data_packet_h
 #define h_data_packet_h
 
-#include <Arduino.h>
+//#include <Arduino.h>
+#include <cstdint>
 
 /// Size of the data packet in bytes
 #define DATA_PACKET_SIZE sizeof(packet_t)
