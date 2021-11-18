@@ -50,7 +50,10 @@ char *get_message_type_string(MessageType type) {
     }
 }
 
-/** @name Join Request */
+/** 
+ * @name Join Request 
+ * @note Instead of using this, write a python program to handle initial configuration.
+ */
 ///@{
 /**
  * @brief Build a join_request message
