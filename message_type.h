@@ -19,7 +19,7 @@ enum MessageType {
 
     // the main node only provides the ACK for these messages
     data_packet = 10,
-    text = 11,
+    text = 11
 };
 
 /// Size of the join request in bytes

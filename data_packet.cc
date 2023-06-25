@@ -13,10 +13,10 @@
  * @param node Unsigned Byte the holds the node number
  * @param message Unsigned Long that holds the message number
  * @param time Unsigned Long that holds the epoch time (seconds since 1/1/1970)
- * @param battery Unsigend Short with battery voltage * 100
+ * @param battery Unsigned Short with battery voltage * 100
  * @param last_tx_duration Unsigned Short ms duration of the previous transmission
  * @param temp Short with temperature in degrees C * 100
- * @param humidity Unsigend Short with percent relative humidity * 100
+ * @param humidity Unsigned Short with percent relative humidity * 100
  * @param status Unsigned Byte with the leaf node status.
  * @return The number of bytes in the packet.
  */
@@ -75,11 +75,11 @@ void parse_data_packet(const packet_t *data, uint8_t *node, uint32_t *message, u
 
 /**
  * @brief print the data packet to a string
- * 
+ *
  * Print the data in packet to a string. The returned pointer is to
- * static storage and will be changed by subsequent calls to this funtion.
+ * static storage and will be changed by subsequent calls to this function.
  * If the optional parameter \c pretty is true, add info for a human.
- * 
+ *
  * @param data The data packet
  * @param pretty Optional, if true, print names, units, etc. Default: false
  * @return Pointer to the string in static storage. Always null terminated.
