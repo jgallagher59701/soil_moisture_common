@@ -384,7 +384,7 @@ bool parse_data_message(const data_message_t *data, uint8_t *node, uint32_t *mes
  * @brief print the data packet to a string
  *
  * Print the data in packet to a string. The returned pointer is to
- * static storage and will be changed by subsequent calls to this funtion.
+ * static storage and will be changed by subsequent calls to this function.
  * If the optional parameter \c pretty is true, add info for a human.
  *
  * @param data The data packet
