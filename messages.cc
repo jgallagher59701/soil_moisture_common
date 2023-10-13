@@ -4,7 +4,6 @@
 // For each message type besides 'data_packet' define a build_, parse_
 // and _to_string function.
 
-// #include <Arduino.h>
 #include <messages.h>
 
 /**
@@ -35,11 +34,7 @@ char *get_message_type_string(MessageType type) {
         case time_request:
             return (char*)"time request";
         case time_response:
-            return (char*)"time response";
-#if 0
-        case error:
-            return (char*)"error";
-#endif
+            return (char *)"time response";
         case data_message:
             return (char*)"data message";
         case text:
@@ -67,8 +62,8 @@ void build_join_request(join_request_t *jr, uint64_t dev_eui) {
 
 /**
  * @brief extract information from a join_request message
- * @param dev_eui If not null, returns the deveice EUI of the requesting leaf node
- * @return true is this is a join_request message, false otehrwise.
+ * @param dev_eui If not null, returns the device EUI of the requesting leaf node
+ * @return true is this is a join_request message, false otherwise.
  */
 bool parse_join_request(const join_request_t *data, uint64_t *dev_eui) {
     if (data->type != join_request)

@@ -7,8 +7,6 @@
 #ifndef h_message_type_h
 #define h_message_type_h
 
-// #include <Arduino.h>
-// #include <RH_RF95.h>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
