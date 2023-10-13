@@ -103,11 +103,11 @@ char *data_packet_to_string(const packet_t *data, bool pretty /* false */) {
         // string length 62 characters + 2 bytes (6 chars) + 2 Longs (20) + 3 Shorts (15)
         // = 62 + 41 = 103
         snprintf((char *)decoded_string, sizeof(decoded_string),
-                 "node: %u, message: %u, time: %u, Vbat %u v, Tx dur %u ms, T: %d C, RH: %u %%, status: 0x%02x",
+                 "node: %u, message: %lu, time: %lu, Vbat %u v, Tx dur %u ms, T: %d C, RH: %u %%, status: 0x%02x",
                  node, message, time, battery, last_tx_duration, temp, humidity, (unsigned int)status);
     } else {
         snprintf((char *)decoded_string, sizeof(decoded_string),
-                 "%u, %u, %u, %u, %u, %d, %u, 0x%02x",
+                 "%u, %lu, %lu, %u, %u, %d, %u, 0x%02x",
                  node, message, time, battery, last_tx_duration, temp, humidity, (unsigned int)status);
     }
 
