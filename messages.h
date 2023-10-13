@@ -138,6 +138,8 @@ struct data_message_t {
     uint8_t status;             // Sensor status code
 };
 
+#define DATA_MESSAGE_SIZE sizeof(data_message_t)
+
 void build_data_message(data_message_t *data, const uint8_t node, const uint32_t message, const uint32_t time,
                        const uint16_t battery, const uint16_t last_tx_duration,
                        const int16_t temp, const uint16_t humidity, const uint8_t status);

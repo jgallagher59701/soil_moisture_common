@@ -171,7 +171,7 @@ void build_time_request(time_request_t *tr, uint8_t node) {
 /**
  * @brief extract information from a time_request message
  * @param node If not null, returns the node number of the requesting leaf node
- * @return true is this is a time_request message, false otherwise.
+ * @return true if this is a time_request message, false otherwise.
  */
 bool parse_time_request(const time_request_t *data, uint8_t *node) {
     if (data->type != time_request)
