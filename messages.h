@@ -96,7 +96,7 @@ struct time_response_t {
 
 struct text_t {
     MessageType type;
-    uint32_t node;      // From
+    uint8_t node;       // From
     uint8_t length;     // Number of chars in buf
     uint8_t buf[TEXT_BUF_LEN];
 };
